@@ -3,7 +3,6 @@ package com.daw.services;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.daw.persistence.crud.PizzaRepository;
@@ -12,7 +11,7 @@ import com.daw.persistence.entities.Pizza;
 @Service
 public class PizzaService {
 	
-	@Autowired
+	
 	private final PizzaRepository pizzaRepository;
 	
 	public PizzaService(PizzaRepository pizzaRepository) {
@@ -38,7 +37,7 @@ public class PizzaService {
 	public boolean deleteById (int idPizza) {
 		boolean result = false;
 		
-		if(this.findById(idPizza).isPresent()) {
+		if(this.pizzaRepository.existsById(idPizza)) {
 			
 			this.pizzaRepository.deleteById(idPizza);
 			result = true;
@@ -47,5 +46,14 @@ public class PizzaService {
 		return result;
 				
 	}
+	
+	public boolean exists(int idPizza) {
+		if(this.pizzaRepository.existsById(idPizza)) {
+			return true;
+		}
+			return false;
+	}
+	
+	
 	
 }

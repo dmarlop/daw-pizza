@@ -39,7 +39,8 @@ public class PizzaController {
 	
 	@PostMapping
 	public ResponseEntity<Pizza> create (@RequestBody Pizza pizza){
-		return ResponseEntity.ok(this.pizzaService.create(pizza));
+		
+		return new ResponseEntity<Pizza> (this.pizzaService.create(pizza), HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{idPizza}")
@@ -49,7 +50,7 @@ public class PizzaController {
 			return ResponseEntity.badRequest().build();
 		}
 		
-		if(this.pizzaService.findById(idPizza).isEmpty()) {
+		if(!this.pizzaService.exists(idPizza)) {
 			return ResponseEntity.notFound().build();
 		}
 		
