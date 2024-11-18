@@ -50,6 +50,7 @@ public class Pedido {
 	
 	@OneToMany(mappedBy  = "pedido")
 	private List<PizzaPedido> pizzaPedido;
+
 	
 	
 }

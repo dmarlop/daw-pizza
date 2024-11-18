@@ -54,6 +54,20 @@ public class PizzaService {
 			return false;
 	}
 	
+	public List<Pizza> disponiblesPrecio(){
+		return this.pizzaRepository.findByDisponibleOrderByPrecioAsc(true);
+	}
 	
+	public List<Pizza> disponiblesNombre(String nombre){
+		return pizzaRepository.findByNombreAndDisponibleTrue(nombre);
+	}
+	
+	public List<Pizza> contieneIngrediente (String ingrediente){
+		return pizzaRepository.findByDescripcionContaining(ingrediente);
+	}
+	
+	public List<Pizza> noContieneIngrediente (String ingrediente){
+		return pizzaRepository.findByDescripcionNotContaining(ingrediente);
+	}
 	
 }

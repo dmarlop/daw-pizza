@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.Pizza;
@@ -68,5 +69,23 @@ public class PizzaController {
 		
 	}
 	
+	@GetMapping("/ordenadas")
+	public ResponseEntity<List<Pizza>> getPizzasOrdenadas(){
+		return ResponseEntity.ok(this.pizzaService.disponiblesPrecio());
+	}
+	
+	@GetMapping("/nombre")
+	public ResponseEntity<List<Pizza>> getPizzasNombre(@RequestParam String nombre){
+		return ResponseEntity.ok(this.pizzaService.disponiblesNombre(nombre));
+	}
+	
+	@GetMapping("/ingrediente")
+	public ResponseEntity<List <Pizza>> getPizzasIngrediente(@RequestParam String ingrediente){
+		return ResponseEntity.ok(this.pizzaService.contieneIngrediente(ingrediente));
+	}
+	@GetMapping("/SinIngrediente")
+	public ResponseEntity<List <Pizza>> getPizzasSinIngrediente(@RequestParam String ingrediente){
+		return ResponseEntity.ok(this.pizzaService.noContieneIngrediente(ingrediente));
+	}
 	
 }
