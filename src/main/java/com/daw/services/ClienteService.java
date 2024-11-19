@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.daw.persistence.crud.ClienteRepository;
 import com.daw.persistence.entities.Cliente;
+import com.daw.persistence.entities.Pedido;
+import com.daw.persistence.entities.Pizza;
 
 
 @Service
@@ -43,6 +45,24 @@ public class ClienteService {
 			result = true;
 		}
 		return result;
+	}
+	
+	public Optional<Cliente> updateDireccion (int idCliente, String direccion) {
+		
+		Optional<Cliente> optionalCliente = findCliente(idCliente);
+		if(optionalCliente.isPresent()) {
+			Cliente cliente = optionalCliente.get();
+			cliente.setDireccion(direccion);
+			this.clienteRepository.save(cliente);
+			return this.clienteRepository.findById(idCliente);
+			
+		}
+		return optionalCliente;
+		
+	}
+	
+	public Optional<Cliente> clienteByTelefono (String telefono){
+		return this.clienteRepository.findByTelefonoStartingWith(telefono);
 	}
 
 }

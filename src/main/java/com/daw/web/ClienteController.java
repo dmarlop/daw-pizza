@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.Cliente;
+import com.daw.persistence.entities.Pizza;
 import com.daw.services.ClienteService;
 
 @RestController
@@ -70,6 +72,27 @@ public class ClienteController {
 			return ResponseEntity.notFound().build();
 		}
 		
+	}
+	
+	@PostMapping("/actualizarDireccion")
+	public ResponseEntity<Optional<Cliente>> actualizarDireccion(@RequestParam int idCliente, @RequestParam String direccion){
+		
+		
+		if(this.clienteService.updateDireccion(idCliente, direccion).isPresent()) {
+			return ResponseEntity.ok(this.clienteService.findCliente(idCliente));
+		}
+			return ResponseEntity.notFound().build();
+		
+	}
+	
+	@GetMapping("/clienteTelefono")
+	public ResponseEntity<Optional<Cliente>> getClienteTelefono(@RequestParam String telefono){
+		Optional<Cliente> cliente = this.clienteService.clienteByTelefono(telefono);
+		if(cliente.isPresent()) {
+			return ResponseEntity.ok().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
 	}
 	
 }

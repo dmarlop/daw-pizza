@@ -70,4 +70,34 @@ public class PizzaService {
 		return pizzaRepository.findByDescripcionNotContaining(ingrediente);
 	}
 	
+	public Optional<Pizza> updatePrecio (int idPizza, double precio) {
+		
+		Optional<Pizza> optionalPizza = findById(idPizza);
+		if(optionalPizza.isPresent()) {
+			Pizza pizza = optionalPizza.get();
+			pizza.setPrecio(precio);
+			this.pizzaRepository.save(pizza);
+			return this.pizzaRepository.findById(idPizza);
+			
+		}
+		return optionalPizza;
+		
+	}
+	
+	public Optional<Pizza> updateDisponible (int idPizza, boolean disponible) {
+		
+		Optional<Pizza> optionalPizza = findById(idPizza);
+		if(optionalPizza.isPresent()) {
+			Pizza pizza = optionalPizza.get();
+			pizza.setDisponible(disponible);
+			this.pizzaRepository.save(pizza);
+			return this.pizzaRepository.findById(idPizza);
+			
+		}
+		return optionalPizza;
+		
+	}
+	
+	
+	
 }
