@@ -1,7 +1,6 @@
 package com.daw.web;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -89,28 +88,26 @@ public class PizzaController {
 		return ResponseEntity.ok(this.pizzaService.noContieneIngrediente(ingrediente));
 	}
 	
-	@PostMapping("/actualizarPrecio")
-	public ResponseEntity<Optional<Pizza>> actualizaPrecio(@PathVariable int idPizza, @RequestBody double nuevoPrecio){
+	@PutMapping("/{idPizza}/actualizarPrecio")
+	public ResponseEntity<Pizza> actualizaPrecio(@PathVariable int idPizza, @RequestParam double nuevoPrecio){
+
+		 if(this.pizzaService.exists(idPizza)) {
+			 return ResponseEntity.ok(this.pizzaService.updatePrecio(idPizza, nuevoPrecio));
+		 }
+		 return ResponseEntity.notFound().build();
 		
-		
-		if(this.pizzaService.updatePrecio(idPizza, nuevoPrecio).isPresent()) {
-			return ResponseEntity.ok(this.pizzaService.findById(idPizza));
-		}
-			return ResponseEntity.notFound().build();
 		
 	}
 	
-	@PostMapping("/actualizarDisponible")
-	public ResponseEntity<Optional<Pizza>> actualizaDisponible(@PathVariable int idPizza, @RequestBody boolean disponible){
-		
-		
-		if(this.pizzaService.updateDisponible(idPizza, disponible).isPresent()) {
-			return ResponseEntity.ok(this.pizzaService.findById(idPizza));
-		}
-			return ResponseEntity.notFound().build();
+	@PutMapping("/{idPizza}/disponible")
+	public ResponseEntity<Pizza> marcarDesmarcarDisponible(@PathVariable int idPizza){
+		 if(this.pizzaService.exists(idPizza)) {
+			 return ResponseEntity.ok(this.pizzaService.updateDisponible(idPizza));
+		 }
+		 return ResponseEntity.notFound().build();
 		
 	}
-	
-	
+		
+		
 	
 }

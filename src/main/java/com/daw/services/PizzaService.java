@@ -70,31 +70,28 @@ public class PizzaService {
 		return pizzaRepository.findByDescripcionNotContaining(ingrediente);
 	}
 	
-	public Optional<Pizza> updatePrecio (int idPizza, double precio) {
+	public Pizza updatePrecio (int idPizza, double precio) {
 		
-		Optional<Pizza> optionalPizza = findById(idPizza);
-		if(optionalPizza.isPresent()) {
-			Pizza pizza = optionalPizza.get();
+		Pizza pizza = this.findById(idPizza).get();
 			pizza.setPrecio(precio);
-			this.pizzaRepository.save(pizza);
-			return this.pizzaRepository.findById(idPizza);
-			
-		}
-		return optionalPizza;
+			pizza = this.pizzaRepository.save(pizza);
+		return pizza;
 		
 	}
 	
-	public Optional<Pizza> updateDisponible (int idPizza, boolean disponible) {
+	public Pizza updateDisponible (int idPizza) {
 		
-		Optional<Pizza> optionalPizza = findById(idPizza);
-		if(optionalPizza.isPresent()) {
-			Pizza pizza = optionalPizza.get();
-			pizza.setDisponible(disponible);
-			this.pizzaRepository.save(pizza);
-			return this.pizzaRepository.findById(idPizza);
-			
+		Pizza pizza = this.findById(idPizza).get();
+
+		if(pizza.isDisponible()) {
+			pizza.setDisponible(false);
+		}else {
+			pizza.setDisponible(true);
 		}
-		return optionalPizza;
+		
+		pizza = this.pizzaRepository.save(pizza);
+	
+		return pizza;
 		
 	}
 	
