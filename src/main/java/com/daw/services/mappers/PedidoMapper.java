@@ -8,7 +8,7 @@ public class PedidoMapper {
 	public static PedidoDTO toDto (Pedido pedido) {
 		PedidoDTO dto = new PedidoDTO();
 		
-		dto.setCliente(pedido.getCliente().toString());
+		dto.setCliente(pedido.getCliente().getNombre());
 		dto.setDireccion(pedido.getCliente().getDireccion());
 		dto.setFecha(pedido.getFecha());
 		dto.setId(pedido.getId());
