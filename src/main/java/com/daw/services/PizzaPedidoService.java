@@ -1,5 +1,6 @@
 package com.daw.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.daw.persistence.crud.PizzaPedidoRepository;
 import com.daw.persistence.entities.PizzaPedido;
+import com.daw.services.dto.PizzaPedidoOutputDTO;
+import com.daw.services.mappers.PizzaPedidoMapper;
 
 @Service
 public class PizzaPedidoService {
@@ -40,4 +43,19 @@ public class PizzaPedidoService {
 		 return result;
 	 }
 	
+	 //CRUDS pizzaPedidoDTO
+	 
+	 public List<PizzaPedidoOutputDTO> findByIdPedido (int idPedido){
+		 List<PizzaPedidoOutputDTO> pizzaPedidoDTO =  new ArrayList<PizzaPedidoOutputDTO>();
+		 
+		 for(PizzaPedido pp : this.pizzaPedidoRepository.findByIdPedido(idPedido)) {
+		  pizzaPedidoDTO.add(PizzaPedidoMapper.toDto(pp));
+		 }
+		 
+		 return pizzaPedidoDTO;
+	 }
+	 
+	 
+	 
+	 
 }

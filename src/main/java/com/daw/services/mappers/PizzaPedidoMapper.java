@@ -1,6 +1,7 @@
 package com.daw.services.mappers;
 
 import com.daw.persistence.entities.PizzaPedido;
+import com.daw.services.dto.PizzaPedidoInputDTO;
 import com.daw.services.dto.PizzaPedidoOutputDTO;
 
 public class PizzaPedidoMapper {
@@ -16,4 +17,15 @@ public class PizzaPedidoMapper {
 		return dto;
 	}
 
+	public static PizzaPedido toEntity(PizzaPedidoInputDTO dto) {
+		PizzaPedido pp = new PizzaPedido();
+		
+		pp.setId(dto.getId());
+		pp.setIdPedido(dto.getIdPedido());
+		pp.setCantidad(dto.getCantidad());
+		pp.setIdPizza(dto.getIdPizza());
+		
+		return pp;
+	}
+	
 }

@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.Pedido;
 import com.daw.services.PedidoService;
+import com.daw.services.PizzaPedidoService;
+import com.daw.services.dto.PedidoDTO;
+import com.daw.services.dto.PizzaPedidoOutputDTO;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -25,21 +28,23 @@ public class PedidoController {
 	@Autowired
 	public PedidoService pedidoService;
 	
+	@Autowired
+	public PizzaPedidoService pizzaPedidoService;
+	
+	//CRUDs de Pedido
+	
 	@GetMapping
-	public ResponseEntity<List<Pedido>> getAll(){
+	public ResponseEntity<List<PedidoDTO>> getAll(){
 		return ResponseEntity.ok(pedidoService.findAll());
 	}
 	
 	@GetMapping("/{idPedido}")
-	public ResponseEntity<Pedido> getPedido(@PathVariable("/idPedido") int idPedido){
-		Optional<Pedido> pedido = this.pedidoService.findPedido(idPedido);
-		if(pedido.isEmpty()) {
-			return ResponseEntity.notFound().build();
-		}else {
-			return ResponseEntity.ok(pedido.get());
+	public ResponseEntity<PedidoDTO> getPedido(@PathVariable("/idPedido") int idPedido){
+		if(this.pedidoService.existsPedido(idPedido)) {
+			return ResponseEntity.ok(this.pedidoService.findById(idPedido));
 		}
 		
-	
+		return ResponseEntity.notFound().build();
 		
 	}
 	
@@ -47,7 +52,7 @@ public class PedidoController {
 	public ResponseEntity<Pedido> pedido(@RequestBody Pedido pedido){
 		return new ResponseEntity<Pedido>(this.pedidoService.create(pedido), HttpStatus.CREATED);
 	}
-	
+	/*
 	@PutMapping("/{idPedido}")
 	public ResponseEntity<Pedido> pedido(@PathVariable("idPedido") int idPedido, @RequestBody Pedido pedido){
 		if(idPedido != pedido.getId()) {
@@ -59,8 +64,8 @@ public class PedidoController {
 		}
 		
 	}
-	
-	
+*/	
+	/*
 	@DeleteMapping("/{idPedido}")
 	public ResponseEntity<Pedido> delete(@PathVariable("idPedido") int idPedido){
 		if(this.pedidoService.delete(idPedido)) {
@@ -71,6 +76,26 @@ public class PedidoController {
 		}
 		
 	}
+	*/
+	//CRUDs de PizzaPedido
+	
+	@GetMapping("/{idPedido}/pizzas")
+	public ResponseEntity<List<PizzaPedidoOutputDTO>> listPizzas(@PathVariable int idPedido){
+		return ResponseEntity.ok(this.pizzaPedidoService.findByIdPedido(idPedido));
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

@@ -8,8 +8,10 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class PizzaPedidoInputDTO {
+	
 	private Integer id;
 	private Integer idPedido;
 	private Integer idPizza;
 	private Double cantidad;
+	
 }

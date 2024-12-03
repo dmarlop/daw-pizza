@@ -1,5 +1,6 @@
 package com.daw.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.daw.persistence.crud.PedidoRepository;
 import com.daw.persistence.entities.Pedido;
+import com.daw.services.dto.PedidoDTO;
+import com.daw.services.mappers.PedidoMapper;
 
 @Service
 public class PedidoService {
@@ -15,12 +18,18 @@ public class PedidoService {
 	@Autowired
 	private PedidoRepository pedidoRepository;
 	
-	public List<Pedido> findAll(){
-		return this.pedidoRepository.findAll();
+	public List<PedidoDTO> findAll(){
+		List<PedidoDTO> pedidosDTO = new ArrayList<PedidoDTO>();
+		
+		for(Pedido p : this.pedidoRepository.findAll()) {
+			pedidosDTO.add(PedidoMapper.toDto(p));
+		}
+		
+		return pedidosDTO;
 	}
 	
-	public Optional<Pedido> findPedido(int idPedido) {
-		return this.pedidoRepository.findById(idPedido);
+	public PedidoDTO findById(int idPedido) {
+		return PedidoMapper.toDto(this.pedidoRepository.findById(idPedido).get()) ;
 	}
 	
 	public Pedido save (Pedido pedido) {
@@ -30,7 +39,7 @@ public class PedidoService {
 	public Pedido create (Pedido pedido) {
 		return this.save(pedido);
 	}
-	
+	/*
 	public boolean delete (int idPedido) {
 		boolean result = false;
 		if(this.findPedido(idPedido).isPresent()) {
@@ -39,6 +48,10 @@ public class PedidoService {
 			return result;
 		}
 		return result;
+	}
+	*/
+	public boolean existsPedido(int idPedido) {
+		return this.pedidoRepository.existsById(idPedido);
 	}
 	
 	
