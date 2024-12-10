@@ -9,4 +9,5 @@ import com.daw.persistence.entities.PizzaPedido;
 public interface PizzaPedidoRepository extends ListCrudRepository<PizzaPedido, Integer> {
 
 	List<PizzaPedido> findByIdPedido(int idPedido);
+	PizzaPedido findByIdPizzaPedido (int idPizzaPedido);
 }

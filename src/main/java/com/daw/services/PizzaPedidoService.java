@@ -55,6 +55,15 @@ public class PizzaPedidoService {
 		 return pizzaPedidoDTO;
 	 }
 	 
+	 public PizzaPedidoOutputDTO findByIdPizza (int idPizzaPedido) {
+		 PizzaPedidoOutputDTO dto = null;
+		 if(pizzaPedidoRepository.existsById(idPizzaPedido)) {
+			 dto = PizzaPedidoMapper.toDto(pizzaPedidoRepository.findByIdPizzaPedido(idPizzaPedido));
+		 }
+		 return dto;
+		 
+	 }
+	 
 	 
 	 
 	 
