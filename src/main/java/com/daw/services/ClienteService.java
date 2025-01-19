@@ -47,6 +47,10 @@ public class ClienteService {
 		return result;
 	}
 	
+	public boolean existsCliente(int idCliente){
+		return this.clienteRepository.existsById(idCliente);
+	}
+	
 	public Optional<Cliente> updateDireccion (int idCliente, String direccion) {
 		
 		Optional<Cliente> optionalCliente = findCliente(idCliente);

@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daw.persistence.entities.Pedido;
+import com.daw.services.ClienteService;
 import com.daw.services.PedidoService;
 import com.daw.services.PizzaPedidoService;
 import com.daw.services.dto.PedidoDTO;
+import com.daw.services.dto.PizzaPedidoInputDTO;
 import com.daw.services.dto.PizzaPedidoOutputDTO;
 
 @RestController
@@ -31,6 +33,9 @@ public class PedidoController {
 	@Autowired
 	public PizzaPedidoService pizzaPedidoService;
 	
+	@Autowired
+	public ClienteService clienteService;
+	
 	//CRUDs de Pedido
 	
 	@GetMapping
@@ -39,7 +44,7 @@ public class PedidoController {
 	}
 	
 	@GetMapping("/{idPedido}")
-	public ResponseEntity<PedidoDTO> getPedido(@PathVariable("/idPedido") int idPedido){
+	public ResponseEntity<PedidoDTO> getPedido(@PathVariable("idPedido") int idPedido){
 		if(this.pedidoService.existsPedido(idPedido)) {
 			return ResponseEntity.ok(this.pedidoService.findById(idPedido));
 		}
@@ -49,23 +54,26 @@ public class PedidoController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Pedido> pedido(@RequestBody Pedido pedido){
-		return new ResponseEntity<Pedido>(this.pedidoService.create(pedido), HttpStatus.CREATED);
+	public ResponseEntity<PedidoDTO> create(@RequestBody Pedido pedido){
+		if(!this.clienteService.existsCliente(pedido.getIdCliente())) {
+			return ResponseEntity.notFound().build();
+		}
+		return new ResponseEntity<PedidoDTO>(this.pedidoService.create(pedido), HttpStatus.CREATED);
 	}
-	/*
+	
 	@PutMapping("/{idPedido}")
 	public ResponseEntity<Pedido> pedido(@PathVariable("idPedido") int idPedido, @RequestBody Pedido pedido){
 		if(idPedido != pedido.getId()) {
 			return ResponseEntity.notFound().build();
-		} else if(this.pedidoService.findPedido(idPedido).isEmpty()) {
+		} else if(!this.pedidoService.existsPedido(idPedido)) {
 			return ResponseEntity.notFound().build();
 		}else {
 			return ResponseEntity.ok(this.pedidoService.save(pedido));
 		}
 		
 	}
-*/	
-	/*
+
+	
 	@DeleteMapping("/{idPedido}")
 	public ResponseEntity<Pedido> delete(@PathVariable("idPedido") int idPedido){
 		if(this.pedidoService.delete(idPedido)) {
@@ -76,21 +84,68 @@ public class PedidoController {
 		}
 		
 	}
-	*/
+	
 	//CRUDs de PizzaPedido
+	
+	//Este método devuelve todas las pizzas de un pedido.
 	
 	@GetMapping("/{idPedido}/pizzas")
 	public ResponseEntity<List<PizzaPedidoOutputDTO>> listPizzas(@PathVariable int idPedido){
 		return ResponseEntity.ok(this.pizzaPedidoService.findByIdPedido(idPedido));
-		
-		
+
 	}
 	
 	
+	@GetMapping("/{idPedido}/pizzas/{idPizzaPedido}")
+	/*Necesitamos 2 parámetros. el numero del pedido, y el número del pizzaPedido*/
+	public ResponseEntity<PizzaPedidoOutputDTO> findByIdPizza(@PathVariable int idPedido, @PathVariable int idPizzaPedido){
+		/*Si no existe el pedido, not found*/
+		if(!this.pedidoService.existsPedido(idPedido)) {
+			return ResponseEntity.notFound().build();
+		}
+		/*Si no existe el pizza Pedido, not found*/
+		if(!this.pizzaPedidoService.existsPizzaPedido(idPizzaPedido)) {
+			return ResponseEntity.notFound().build();
+		}
+		/*llamamos a buscar findPizzaPedidoDTO (porque lo que queremos hacer es devolverlo ya siendo DTO)*/
+		return ResponseEntity.ok(this.pizzaPedidoService.findPizzaPedidoDTO(idPizzaPedido));
+	}
 	
+	@PostMapping("/{idPedido}/pizzas")
+	public ResponseEntity<PizzaPedidoOutputDTO> addPizza(@PathVariable int idPedido, @RequestBody PizzaPedidoInputDTO pizzaPedido){
+		if(!this.pedidoService.existsPedido(idPedido)) {
+			return ResponseEntity.notFound().build();
+		}
+		if(!this.pizzaPedidoService.existsPizzaPedido(pizzaPedido.getIdPizza())) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		return new ResponseEntity<PizzaPedidoOutputDTO>(this.pedidoService.addModPizza(pizzaPedido), HttpStatus.CREATED);
+	}
 	
+	@PutMapping("/{idPedido}/pizzas")
+	public ResponseEntity<PizzaPedidoOutputDTO> modPizza(@PathVariable int idPedido, @RequestBody PizzaPedidoInputDTO pizzaPedido){
+		if(!this.pedidoService.existsPedido(idPedido)) {
+			return ResponseEntity.notFound().build();
+		}
+		if(!this.pizzaPedidoService.existsPizzaPedido(pizzaPedido.getIdPizza())) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		return new ResponseEntity<PizzaPedidoOutputDTO>(this.pedidoService.addModPizza(pizzaPedido), HttpStatus.CREATED);
+	}
 	
-	
+	@DeleteMapping("/{idPedido}/pizzas/{idPizzaPedido}")
+	public ResponseEntity<PizzaPedidoOutputDTO> deletePizza(@PathVariable int idPedido, @PathVariable int idPizzaPedido){
+		if(!this.pedidoService.existsPedido(idPedido)) {
+			return ResponseEntity.notFound().build();
+		}
+		if(!this.pizzaPedidoService.existsPizzaPedido(idPizzaPedido)) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		return ResponseEntity.ok(this.pedidoService.deletePizza(idPedido, idPizzaPedido));
+	}
 	
 	
 	
