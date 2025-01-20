@@ -1,5 +1,7 @@
 package com.daw.web;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -147,13 +149,40 @@ public class PedidoController {
 		return ResponseEntity.ok(this.pedidoService.deletePizza(idPedido, idPizzaPedido));
 	}
 	
+	@GetMapping("/llevar")
+	public ResponseEntity<List<Pedido>> findByLlevar(){
+		String metodo = "L";
+		return ResponseEntity.ok(this.pedidoService.findByMetodo(metodo));
+	}
+	
+	@GetMapping("/consumirLocal")
+	public ResponseEntity<List<Pedido>> findByConsumirLocal(){
+		String metodo = "C";
+		return ResponseEntity.ok(this.pedidoService.findByMetodo(metodo));
+	}
+	
+
+	@GetMapping("/domicilio")
+	public ResponseEntity<List<Pedido>> findByDomicilio(){
+		String metodo = "D";
+		return ResponseEntity.ok(this.pedidoService.findByMetodo(metodo));
+	}
 	
 	
+	@GetMapping("/hoy")
+	public ResponseEntity<List<Pedido>> findByHoy(){
+		LocalDateTime hoy = LocalDateTime.now();
+		return ResponseEntity.ok(this.pedidoService.findByHoy(hoy));
+	}
 	
-	
-	
-	
-	
+	@GetMapping("/pedidos/{idCliente}")
+	public ResponseEntity<List<Pedido>> findByCliente (@PathVariable int idCliente){
+		if(!this.clienteService.existsCliente(idCliente)) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		return ResponseEntity.ok(this.pedidoService.findByCliente(idCliente));
+	}
 	
 	
 }

@@ -1,5 +1,6 @@
 package com.daw.services;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -163,6 +164,18 @@ public class PedidoService {
 		}
 		/*Error por si no lo encuentra*/
 		 throw new IllegalArgumentException("Pizza no encontrada en el pedido con ID: " + idPedido);
+	}
+	
+	public List<Pedido> findByMetodo (String metodo){
+		return this.pedidoRepository.findByMetodo(metodo);
+	}
+	
+	public List<Pedido> findByHoy (LocalDateTime fecha){
+		return this.pedidoRepository.findByFecha(fecha);
+	}
+	
+	public List<Pedido> findByCliente (int cliente){
+		return this.pedidoRepository.findByIdCliente(cliente);
 	}
 	
 	
